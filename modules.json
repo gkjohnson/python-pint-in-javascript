@@ -1,0 +1,28 @@
+{
+    "pint/__init__.py": "./pythonlibs/pint/__init__.py",
+    "pint/formatting.py": "./pythonlibs/pint/formatting.py",
+    "pint/babel_names.py": "./pythonlibs/pint/babel_names.py",
+    "pint/registry.py": "./pythonlibs/pint/registry.py",
+    "pint/registry_helpers.py": "./pythonlibs/pint/registry_helpers.py",
+    "pint/errors.py": "./pythonlibs/pint/errors.py",
+    "pint/util.py": "./pythonlibs/pint/util.py",
+    "pint/pint_eval.py": "./pythonlibs/pint/pint_eval.py",
+    "pint/context.py": "./pythonlibs/pint/context.py",
+    "pint/definitions.py": "./pythonlibs/pint/definitions.py",
+    "pint/converters.py": "./pythonlibs/pint/converters.py",
+    "pint/systems.py": "./pythonlibs/pint/systems.py",
+    "pint/unit.py": "./pythonlibs/pint/unit.py",
+    "pint/quantity.py": "./pythonlibs/pint/quantity.py",
+    "pint/measurement.py": "./pythonlibs/pint/measurement.py",
+
+    "thread.py": "./pythonlibs/thread.py",
+    "threading.py": "./pythonlibs/thread.py",
+    
+    "pkg_resources.py": "./pythonlibs/pkg_resources.py",
+
+    "pint/compat/__init__.py": "./pythonlibs/pint/compat/__init__.py",
+    "pint/compat/chainmap.py": "./pythonlibs/pint/compat/chainmap.py",
+    "pint/compat/lrucache.py": "./pythonlibs/pint/compat/lrucache.py",
+    "pint/compat/meta.py": "./pythonlibs/pint/compat/meta.py",
+    "pint/compat/tokenize.py": "./pythonlibs/pint/compat/tokenize.py"
+}

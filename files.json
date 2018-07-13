@@ -1,0 +1,5 @@
+{
+    "default_en.txt": "./pythonlibs/pint/default_en.txt",
+    "default_en_0.6.txt": "./pythonlibs/pint/default_en_0.6.txt",
+    "constants_en.txt": "./pythonlibs/pint/constants_en.txt"
+}
