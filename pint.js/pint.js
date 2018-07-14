@@ -53,7 +53,7 @@ function writeFile(name, dir, content) {
 
 }
 
-(async() => {
+const isReadPromise = (async() => {
 
     await pypy.ready();
 
@@ -83,7 +83,9 @@ function writeFile(name, dir, content) {
 
     await Promise.all(promises);
 
-    pypy.exec(
+    isReady = true;
+
+    return pypy.exec(
         dd`
         import js
         import json
@@ -92,15 +94,18 @@ function writeFile(name, dir, content) {
         Q = ureg.Quantity
         `);
 
-    isReady = true;
-
 })();
 
 export default
 class PintRegistry {
 
     get ready() { return isReady; }
-    get pypy() { return pypy; }
+
+    whenReady() {
+
+        return isReadPromise;
+
+    }
 
     convert(...args) {
 

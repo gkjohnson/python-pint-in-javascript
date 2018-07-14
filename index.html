@@ -12,6 +12,13 @@
 
             const ureg = new PintRegistry();
             window.ureg = ureg;
+
+            ureg.whenReady().then(() => {
+                const script = `ureg.convert(1002, 'Gg * dm / min^2', 'N')`;
+                console.log('Registry available on `window.ureg`!');
+                console.log(`> ${ script }`);
+                console.log(eval(script));
+            });
         </script>
 
     </body>
