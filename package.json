@@ -1,8 +1,4 @@
 {
-  "name": "pypyjs-test",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "dependencies": {
     "pypyjs": "^0.4.1"
   },
@@ -11,8 +7,6 @@
   },
   "scripts": {
     "start": "static-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC"
+    "postinstall": "pip install -r requirements.txt -t ./pythonlibs/packages"
+  }
 }
