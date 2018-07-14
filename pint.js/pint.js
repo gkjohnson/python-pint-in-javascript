@@ -8,8 +8,6 @@ const pypy =
         stderr: pypyjs._defaultStderr,
     });
 
-window.pypy = pypy;
-
 function writeFile(name, dir, content) {
 
     let makeDir = `${ dir }/${ name }`.replace(/\/+/g, '/').split('/');
@@ -36,25 +34,20 @@ function writeFile(name, dir, content) {
 
 }
 
-function defineModule(name, content) {
-
-    return writeFile(name, '/lib/pypyjs/lib_pypy/', content);
-
-}
-
 (async() => {
 
     await pypy.ready();
 
-    const modules = await fetch('./modules.json').then(res => res.json());
     const promises = [];
+
+    const modules = await fetch('./modules.json').then(res => res.json());
     Object
         .keys(modules)
         .forEach(name => {
             promises.push(
                 fetch(modules[name])
                     .then(res => res.text())
-                    .then(res => defineModule(name, res))
+                    .then(res => writeFile(name, '/lib/pypyjs/lib_pypy/', res))
             );
         });
 
