@@ -12,13 +12,20 @@ window.pypy = pypy;
 
 function writeFile(name, dir, content) {
 
+    let makeDir = `${ dir }/${ name }`.replace(/\/+/g, '/').split('/');
+    makeDir.pop();
+    makeDir = makeDir.join('/');
     const script =
         dd`
         import os
-        LIB_PATH = "${ dir }"
+
+        dir = os.path.join("${ dir }", "${ name }")
+        try:
+            os.makedirs("${ makeDir }")
+        except:
+            pass
 
         script = """${ content.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n') }"""
-        dir = os.path.join(LIB_PATH, "${ name }")
 
         with open(dir, "w") as f:
             f.write(script)
@@ -38,13 +45,6 @@ function defineModule(name, content) {
 (async() => {
 
     await pypy.ready();
-
-    pypy.exec(
-        dd`
-        import os
-        os.makedirs("/lib/pypyjs/lib_pypy/pint")
-        os.makedirs("/lib/pypyjs/lib_pypy/pint/compat")
-        `);
 
     const modules = await fetch('./modules.json').then(res => res.json());
     const promises = [];
