@@ -8,6 +8,25 @@ const pypy =
         stderr: pypyjs._defaultStderr,
     });
 
+let isReady = false;
+
+function escape(value) {
+
+    return value.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+
+}
+
+function execNow(code) {
+
+    if (isReady === false) {
+
+        throw new Error('Pypy environment is not ready');
+
+    }
+    pypy._execute_source(`exec """${ escape(code) }""" in top_level_scope.__dict__`);
+
+}
+
 function writeFile(name, dir, content) {
 
     let makeDir = `${ dir }/${ name }`.replace(/\/+/g, '/').split('/');
@@ -66,24 +85,45 @@ function writeFile(name, dir, content) {
 
     pypy.exec(
         dd`
+        import js
         import pint.compat
         ureg = pint.UnitRegistry('default_en.txt')
         Q = ureg.Quantity
-
-        print 3 * ureg.meter + 4 * ureg.cm
         `);
+
+    isReady = true;
 
 })();
 
-// export
-// class PintRegistry {
+export default
+class PintRegistry {
 
-//     get ready() { return pypy.isReady(); }
+    get ready() { return isReady; }
+    get pypy() { return pypy; }
 
-//     covert(val, from, to) {
+    covert(val, from, to) {
 
-//         window.
+        let res = null;
+        let errmsg = null;
+        window.__valFunc__ = (val, err) => {
+            res = val;
+            errmsg = err;
+        };
 
-//     }
+        execNow(dd`
+        try:
+            res = Q(${ val }, "${ from }").to("${ to }")
+            js.eval("__valFunc__(" + str(res.magnitude) + ", null)")
+        except Exception as e:
+            js.eval("__valFunc__(null, \\"" + str(e) + "\\")")
+        `);
 
-// }
+        delete window.__valFunc__;
+
+        if (errmsg) throw new Error(errmsg);
+
+        return res;
+
+    }
+
+}

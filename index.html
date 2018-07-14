@@ -1,12 +1,18 @@
+<!doctype html>
 <html>
     <head>
         <script src="./node_modules/pypyjs/lib/FunctionPromise.js"></script>
         <script src="./node_modules/pypyjs/lib/pypyjs.js"></script>
     </head>
-    
+
     <body>
 
-        <script type="module" src="./pint.js/pint.js"></script>
+        <script type="module">
+            import PintRegistry from './pint.js/pint.js';
+
+            const ureg = new PintRegistry();
+            window.ureg = ureg;
+        </script>
 
     </body>
 </html>
