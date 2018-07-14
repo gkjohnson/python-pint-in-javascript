@@ -179,7 +179,7 @@ class PintRegistry {
         execNow(dd`
         try:
             res = Q(${ val }, "${ from }").${ func }(${ to ? `"${ to }"` : 'None' });
-            js.eval("__valFunc__({ value:" + str(res.magnitude) + ", units:\\"" + str(res.units) + "\\" }, null)")
+            js.eval("__valFunc__({ value:" + repr(res.magnitude) + ", units:\\"" + str(res.units) + "\\" }, null)")
         except Exception as e:
             js.eval("__valFunc__(null, \\"" + str(e) + "\\")")
         `);
