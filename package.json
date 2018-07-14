@@ -6,7 +6,9 @@
   "dependencies": {
     "pypyjs": "^0.4.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "static-server": "^2.2.1"
+  },
   "scripts": {
     "start": "static-server",
     "test": "echo \"Error: no test specified\" && exit 1"
