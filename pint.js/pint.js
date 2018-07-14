@@ -1,4 +1,5 @@
 /* globals pypyjs */
+import dd from './dedent.js';
 
 const pypy =
     new pypyjs({
@@ -12,17 +13,17 @@ window.pypy = pypy;
 function writeFile(name, dir, content) {
 
     const script =
-`
-import os
-LIB_PATH = "${ dir }"
+        dd`
+        import os
+        LIB_PATH = "${ dir }"
 
-script = """${ content.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n') }"""
-dir = os.path.join(LIB_PATH, "${ name }")
+        script = """${ content.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n') }"""
+        dir = os.path.join(LIB_PATH, "${ name }")
 
-with open(dir, "w") as f:
-    f.write(script)
+        with open(dir, "w") as f:
+            f.write(script)
 
-`;
+        `;
 
     return pypy.exec(script);
 
@@ -39,11 +40,11 @@ function defineModule(name, content) {
     await pypy.ready();
 
     pypy.exec(
-        `
-import os
-os.makedirs("/lib/pypyjs/lib_pypy/pint")
-os.makedirs("/lib/pypyjs/lib_pypy/pint/compat")
-`);
+        dd`
+        import os
+        os.makedirs("/lib/pypyjs/lib_pypy/pint")
+        os.makedirs("/lib/pypyjs/lib_pypy/pint/compat")
+        `);
 
     const modules = await fetch('./modules.json').then(res => res.json());
     const promises = [];
@@ -71,13 +72,13 @@ os.makedirs("/lib/pypyjs/lib_pypy/pint/compat")
     await Promise.all(promises);
 
     pypy.exec(
-        `
-import pint.compat
-ureg = pint.UnitRegistry('default_en.txt')
-Q = ureg.Quantity
+        dd`
+        import pint.compat
+        ureg = pint.UnitRegistry('default_en.txt')
+        Q = ureg.Quantity
 
-print 3 * ureg.meter + 4 * ureg.cm
-`);
+        print 3 * ureg.meter + 4 * ureg.cm
+        `);
 
 })();
 
