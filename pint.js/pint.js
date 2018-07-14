@@ -86,6 +86,7 @@ function writeFile(name, dir, content) {
     pypy.exec(
         dd`
         import js
+        import json
         import pint.compat
         ureg = pint.UnitRegistry('default_en.txt')
         Q = ureg.Quantity
@@ -101,7 +102,72 @@ class PintRegistry {
     get ready() { return isReady; }
     get pypy() { return pypy; }
 
-    covert(val, from, to) {
+    convert(...args) {
+
+        return this._runConvert('to', ...args);
+
+    }
+
+    toCompact(...args) {
+
+        return this._runConvert('to_compact', ...args);
+
+    }
+
+    toBaseUnits(...args) {
+
+        return this._runConvert('to_base_units', ...args);
+
+    }
+
+    toRootUnits(...args) {
+
+        return this.this._runConvert('to_root_units', ...args);
+
+    }
+
+    toReducedUnits(...args) {
+
+        return this.this._runConvert('to_reduced_units', ...args);
+
+    }
+
+    getUnitDefinitions() {
+
+        let res = null;
+        window.__valFunc__ = val => res = val;
+
+        execNow(dd`
+        units = ureg._units.keys()
+        suffixes = ureg._suffixes.keys()
+        prefixes = ureg._prefixes.keys()
+
+        res = {}
+        res["prefixes"] = [];
+        res["units"] = [];
+        res["suffixes"] = [];
+
+        for p in prefixes:
+            res["prefixes"].append(p.encode('utf-8'))
+
+        for u in units:
+            res["units"].append(u.encode('utf-8'))
+
+        for s in suffixes:
+            res["suffixes"].append(s.encode('utf-8'))
+
+        js.eval("__valFunc__(" + json.dumps(res) + ")")
+
+        `);
+
+        delete window.__valFunc__;
+
+        return res;
+
+    }
+
+    /* Private Functions */
+    _runConvert(func, val, from, to) {
 
         let res = null;
         let errmsg = null;
@@ -112,7 +178,7 @@ class PintRegistry {
 
         execNow(dd`
         try:
-            res = Q(${ val }, "${ from }").to("${ to }")
+            res = Q(${ val }, "${ from }").${ func }(${ to ? `"${ to }"` : 'None' });
             js.eval("__valFunc__({ value:" + str(res.magnitude) + ", units:\\"" + str(res.units) + "\\" }, null)")
         except Exception as e:
             js.eval("__valFunc__(null, \\"" + str(e) + "\\")")
